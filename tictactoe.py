@@ -37,14 +37,16 @@ def makeMove(board, letter, move):
 def isWinner(bo, le):
     # Given a board and a players letter, this function returns True if that player has won
     # bo is short for board, and le for letter. This is to reduce the amount of typing needed
-    return ((bo[7] == le and bo[8] == le and bo[9] == le)) 
-    (bo[4] == le and bo[5] == le and bo[6] == le)
-    (bo[1] == le and bo[2] == le and bo[3] == le)
-    (bo[7] == le and bo[4] == le and bo[1] == le)
-    (bo[8] == le and bo[5] == le and bo[2] == le)
-    (bo[9] == le and bo[6] == le and bo[3] == le)
-    (bo[7] == le and bo[5] == le and bo[3] == le)
-    (bo[9] == le and bo[5] == le and bo[1] == le)
+    return (
+        (bo[7] == le and bo[8] == le and bo[9] == le) or
+        (bo[4] == le and bo[5] == le and bo[6] == le) or
+        (bo[1] == le and bo[2] == le and bo[3] == le) or
+        (bo[7] == le and bo[4] == le and bo[1] == le) or
+        (bo[8] == le and bo[5] == le and bo[2] == le) or
+        (bo[9] == le and bo[6] == le and bo[3] == le) or
+        (bo[7] == le and bo[5] == le and bo[3] == le) or
+        (bo[9] == le and bo[5] == le and bo[1] == le)
+    )
 
 def getBoardCopy(board):
     # Make a copy of the board list and return it
@@ -73,10 +75,10 @@ def chooseRandomMoveFromList(board, movesList):
         if isSpaceFree(board, i):
             possibleMoves.append(i)
 
-        if len(possibleMoves) != 0:
-            return random.choice(possibleMoves)
-        else:
-            return None
+    if len(possibleMoves) != 0:
+        return random.choice(possibleMoves)
+    else:
+        return None
 
 def getComputerMove(board, computerLetter):
     # Given a board and the computer's letter, determine where to move and return that move
@@ -87,31 +89,39 @@ def getComputerMove(board, computerLetter):
 
         # Here is the algorithm for the Tic-Tac-Toe AI:
         # First, check if we can win in the next move
-        for i in range(1, 10):
-            boardCopy = getBoardCopy(board)
-            if isSpaceFree(boardCopy, i):
-                makeMove(boardCopy, computerLetter, i)
-                if isWinner(boardCopy, playerLetter):
-                    return i
+    for i in range(1, 10):
+        boardCopy = getBoardCopy(board)
+        if isSpaceFree(boardCopy, i):
+            makeMove(boardCopy, computerLetter, i)
+            if isWinner(boardCopy, computerLetter):
+                return i
 
-        # Try to take one of the corners, if they are free
-        move = chooseRandomMoveFromList(board, [1, 3, 7, 9])
-        if move != None:
-            return move
+    # Check if player can win, and block them
+    for i in range(1, 10):
+        boardCopy = getBoardCopy(board)
+        if isSpaceFree(boardCopy, i):
+            makeMove(boardCopy, playerLetter, i)
+            if isWinner(boardCopy, playerLetter):
+                return i
 
-        # Try to take the center if it is free
-        if isSpaceFree(board, 5):
-            return 5
+    # Try to take one of the corners, if they are free
+    move = chooseRandomMoveFromList(board, [1, 3, 7, 9])
+    if move is not None:
+        return move
+
+    # Try to take the center if it is free
+    if isSpaceFree(board, 5):
+        return 5
         
-        # Move on one of the sides
-        return chooseRandomMoveFromList(board, [2, 4, 6, 8])
+    # Move on one of the sides
+    return chooseRandomMoveFromList(board, [2, 4, 6, 8])
 
 def isBoardFull(board):
     # Return True if every space on the board has been taken. Otherwise return False
     for i in range(1, 10):
         if isSpaceFree(board, i):
             return False
-        return True
+    return True
 print('Welcome to Tic-Tac-Toe!')
 
 while True:
@@ -119,7 +129,7 @@ while True:
     theBoard = [' '] * 10
     playerLetter, computerLetter = inputPlayerLetter()
     turn = whoGoesFirst()
-    print('The ' + turn + 'will go first.')
+    print('The ' + turn + ' will go first.')
     gameIsPlaying = True
 
     while gameIsPlaying:
