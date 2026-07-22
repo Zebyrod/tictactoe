@@ -99,6 +99,7 @@ def getComputerMove(board, computerLetter):
         playerLetter = 'X'
 
         # Here is the algorithm for the Tic-Tac-Toe AI:
+        # Sidenote here after testing the game it seems very difficult to defeat the AI, most games end up in a draw. Maybe I will come back to this algorithim and implement difficulty levels so the player can choose to challenge themselves or take it easy.
         # First, check if we can win in the next move
     for i in range(1, 10):
         boardCopy = getBoardCopy(board)
@@ -127,6 +128,7 @@ def getComputerMove(board, computerLetter):
     # Move on one of the sides
     return chooseRandomMoveFromList(board, [2, 4, 6, 8])
 
+# Now that the AI is complete, this next function will check if the board has been filled up
 def isBoardFull(board):
     # Return True if every space on the board has been taken. Otherwise return False
     for i in range(1, 10):
@@ -135,6 +137,8 @@ def isBoardFull(board):
     return True
 print('Welcome to Tic-Tac-Toe!')
 
+# Finally we will hanlde the game logic and how the turns will be handled between each player. These are utilizing the functions created above to continually update the board and get the players inputs until the game has been completed. 
+# Once the game is finished we want to print out a message according to the result. Afterwards we will ask the player if they want to play again
 while True:
     # Reset the board
     theBoard = [' '] * 10
