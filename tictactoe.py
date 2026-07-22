@@ -1,5 +1,7 @@
 import random
+# This game will be tic-tac-toe the player will chose either X or O and will play against an AI 
 
+# The first function I created is the drawBoard function. This will display the board onto the console for the player to see
 def drawBoard(board):
     # This function prints out the board that was passed
 
@@ -10,6 +12,7 @@ def drawBoard(board):
     print('-+-+-')
     print(board[1] + '|' + board[2] + '|' + board[3])
 
+# This next function will prompt the player to select a letter and assign the other letter to the AI player
 def inputPlayerLetter():
     # This will allow the player to select which team they want to be x or o
     # Return a list with the player's letter as the first item and the computer's as the second
@@ -24,6 +27,7 @@ def inputPlayerLetter():
         else:
             return ['O', 'X']
 
+# This next function will use the random module to randomly select which player will go first
 def whoGoesFirst():
     # Randomly select who gets the first turn
     if random.randint(0, 1) == 0:
@@ -31,9 +35,11 @@ def whoGoesFirst():
     else:
         return 'player'
 
+# This function will fill in the spots on the board as the players select their moves
 def makeMove(board, letter, move):
     board[move] = letter
 
+# In this function we are setting the win conditions, this will check if either player has met the conditions to win
 def isWinner(bo, le):
     # Given a board and a players letter, this function returns True if that player has won
     # bo is short for board, and le for letter. This is to reduce the amount of typing needed
@@ -48,6 +54,7 @@ def isWinner(bo, le):
         (bo[9] == le and bo[5] == le and bo[1] == le)
     )
 
+# In this for loop we are creating a copy of the board and returning it 
 def getBoardCopy(board):
     # Make a copy of the board list and return it
     boardCopy = []
@@ -55,13 +62,16 @@ def getBoardCopy(board):
         boardCopy.append(i)
     return boardCopy
 
+# Next up as the moves are made we need to check if that space has been taken already. If not then allow the move
 def isSpaceFree(board, move):
     # Return true if the passed move is free on the board
     return board[move] == ' '
 
+# First up we are going to tackle how the player will make their moves. The board is set up like a grid and the players will enter number 1-9 each representing a spot on the board
 def getPlayerMove(board):
     # Let the player enter their move
     move = ' '
+    # With this line we want to make sure the input is a valid input. This will be valid if it is a number between 1-9 or and if the space is free. Once these conditions are met we will return the board with the move
     while move not in '1 2 3 4 5 6 7 8 9'.split() or not isSpaceFree(board, int(move)):
         print('What is your next move? (1-9)')
         move = input()
@@ -80,6 +90,7 @@ def chooseRandomMoveFromList(board, movesList):
     else:
         return None
 
+# After handling the player's moves, we now are going to tackle the AI and how it will choose what to do. First up is deciding which letter it will be based on the players selection
 def getComputerMove(board, computerLetter):
     # Given a board and the computer's letter, determine where to move and return that move
     if computerLetter == 'X':
